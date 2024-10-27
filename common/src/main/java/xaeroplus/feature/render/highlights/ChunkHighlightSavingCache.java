@@ -42,6 +42,9 @@ public class ChunkHighlightSavingCache implements ChunkHighlightCache {
             ChunkHighlightCacheDimensionHandler cacheForCurrentDimension = getCacheForCurrentDimension();
             if (cacheForCurrentDimension == null) throw new RuntimeException("Didn't find cache for current dimension");
             cacheForCurrentDimension.addHighlight(x, z);
+            getAllCaches().stream()
+                    .map(ChunkHighlightCacheDimensionHandler::writeAllHighlightsToDatabase)
+                    .collect(Collectors.toList());
             return true;
         } catch (final Exception e) {
             XaeroPlus.LOGGER.debug("Error adding highlight to {} disk cache: {}, {}", databaseName, x, z, e);
